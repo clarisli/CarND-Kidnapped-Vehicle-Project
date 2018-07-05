@@ -63,16 +63,16 @@ The file `particle_filter.cpp` in the `src` directory contains the implememntati
 ![alt text][image2]
 
 #### 1. Initialization
-The most practical way to initialize our particles and generate real time output, is to make an initial estimate using GPS input. I choose to sample 100 particles around the GPS measurements. 
+The most practical way to initialize our particles and generate real time output, is to make an initial estimate using GPS input. I chose to sample 100 particles around the GPS measurements. 
 
-As with all sensor based operations, this step is impacted by noise. I take into account Gaussian sensor noise around the initial GPS position estimate and the intial estimate.
+As with all sensor based operations, this step is impacted by noise. I took into account Gaussian sensor noise around the initial GPS position estimate and the intial heading estimate.
 
 I did this in lines 22 to 64 of the function `init()` in `particle_filter.cpp`.
 
 #### 2. Prediction
-In this step, I predict where the car will be at the next time step by updating each particle's location based on velocity and yaw rate measurements. To account for the uncertainty in the control input, I also add Gaussian noise to the velocity and yaw rate.
+In this step, I predicted where the car will be at the next time step by updating each particle's location based on velocity and yaw rate measurements. To account for the uncertainty in the control input, I also added Gaussian noise to the velocity and yaw rate.
 
-The equations for updating x, y, and the yaw angle when the yaw rate is not equal to zero:
+Here are the equations for updating x, y, and the yaw angle when the yaw rate is not equal to zero:
 
 ![alt text][image3]
 
@@ -83,10 +83,10 @@ I did this in lines 66 to 97 of the function `prediction()` in `particle_filter.
 The goal is to find a weight parameter for each particle that represents how well the particle fits to being the same location as the actual car.
 
 ##### Landmark within Sensor Range
-I first find all landmarks within the sensor range. I did this in lines 137 to 157 of `updateWeights()` in `particle_filter.cpp`.
+I first found all landmarks within the sensor range. I did this in lines 137 to 157 of `updateWeights()` in `particle_filter.cpp`.
 
 ##### Transform
-I then transform the car's measurements from its local car coordinate system to the map's coordinate sysem.
+I then transformed the car's measurements from its local car coordinate system to the map's coordinate sysem.
 
 Observations in the car coordinate system can be transformed into map coordinates (x_m and y_m) by passing car observation coordinates (x_c and y_c), map particle coordinates (x_p and y_p), and our rotation angle (-90 degrees) through a homogenous transformation matrix. This homogenous transformation matrix, shown below, performs rotation and translation.
 
@@ -95,14 +95,14 @@ Observations in the car coordinate system can be transformed into map coordinate
 I did this in lines 160 to 171 of the function `updateWeights()` in `particle_filter.cpp`.
 
 ##### Association
-Next, each measurement will need to be associate with a landmark identifies, for this I take the closest landmark to each transformed observation.
+Next, each measurement needs to be associate with a landmark identifies, for this I took the closest landmark to each transformed observation.
 
-I use Nearest Neighbor to match landmark measurements to objects in the real world. In this method, I simply take the the closest measurement as the correct correspondents.
+I used Nearest Neighbor to match landmark measurements to objects in the real world, which I simply took the the closest measurement as the correct correspondents.
 
 I did this in lines 99 to 123 of the function `dataAssociation()` in`particle_filter.cpp`.
 
 #### 4. Update Weights
-Finally, I use this information to calculate the weight value of the particle. The particle's final weight is the product of each measurement's Multivariate-Gaussian probability density:
+Finally, I used information uptained from previous steps to calculate the weight value of the particle. The particle's final weight is the product of each measurement's Multivariate-Gaussian probability density:
 
 ![alt text][image5]
 
@@ -111,9 +111,9 @@ Where the mean of the Multivariate-Gaussian is the measurment's associated landm
 I did this in lines 177 to 205 of the function`updateWeights()` in `particle_filter.cpp`.
 
 #### 5. Resampling
-In this step, I randmomly draw new particles from old ones with replacement in porportion to their importance weights. After resampling, particlesre with higher weights are likely to stay and particles with lower weights may die out.
+In this step, I randmomly drew new particles from old ones with replacement in porportion to their importance weights. After resampling, particles with higher weights are likely to stay and particles with lower weights may die out.
 
-I use Resampling Wheel technique to achieve this:
+I used Resampling Wheel technique to achieve this:
 
 ![alt text][image6]
 
