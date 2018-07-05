@@ -102,7 +102,7 @@ I used Nearest Neighbor to match landmark measurements to objects in the real wo
 I did this in lines 99 to 123 of the function `dataAssociation()` in`particle_filter.cpp`.
 
 #### 4. Update Weights
-Finally, I used information uptained from previous steps to calculate the weight value of the particle. The particle's final weight is the product of each measurement's Multivariate-Gaussian probability density:
+Finally, I used information obtained from previous steps to calculate the weight value of the particle. The particle's final weight is the product of each measurement's Multivariate-Gaussian probability density:
 
 ![alt text][image5]
 
@@ -111,7 +111,7 @@ Where the mean of the Multivariate-Gaussian is the measurment's associated landm
 I did this in lines 177 to 205 of the function`updateWeights()` in `particle_filter.cpp`.
 
 #### 5. Resampling
-In this step, I randmomly drew new particles from old ones with replacement in porportion to their importance weights. After resampling, particles with higher weights are likely to stay and particles with lower weights may die out.
+In this step, I randomly drew new particles from old ones with replacement in porportion to their importance weights. After resampling, particles with higher weights are likely to stay and particles with lower weights may die out.
 
 I used Resampling Wheel technique to achieve this:
 
